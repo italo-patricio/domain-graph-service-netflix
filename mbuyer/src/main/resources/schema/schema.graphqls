@@ -1,0 +1,13 @@
+type Query {
+    buyers(nameFilter: String): [Buyer]
+}
+
+type Product @key(fields: "buyerId") @extends {
+    buyerId: Int @external
+    buyer: Buyer
+}
+
+type Buyer @key(fields: "id") {
+    id: Int!
+    name: String!
+}

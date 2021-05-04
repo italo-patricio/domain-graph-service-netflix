@@ -1,0 +1,9 @@
+type Query {
+    products(titleFilter: String): [Product]
+}
+
+type Product @key(fields: "id") @key(fields: "buyerId"){
+    id: Int!
+    title: String!
+    buyerId: Int
+}
