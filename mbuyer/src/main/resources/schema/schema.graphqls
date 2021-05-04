@@ -7,7 +7,8 @@ type Product @key(fields: "buyerId") @extends {
     buyer: Buyer
 }
 
-type Buyer @key(fields: "id") {
+type Buyer @key(fields: "id") @key(fields: "characterId") {
     id: Int!
     name: String!
+    characterId: String
 }
