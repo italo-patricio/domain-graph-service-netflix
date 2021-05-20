@@ -1,11 +1,11 @@
-package br.com.italopatricio.mbuyer.models;
+package br.com.italopatricio.mseller.models;
 
 import java.io.Serializable;
 
 public class Product implements Serializable {
     private int id;
     private int buyerId;
-    private Buyer buyer;
+    private Seller buyer;
 
     public Product(int id, int buyerId) {
         this.id = id;
@@ -16,7 +16,7 @@ public class Product implements Serializable {
         return buyerId;
     }
 
-    public Buyer getBuyer() {
+    public Seller getBuyer() {
         return buyer;
     }
 }

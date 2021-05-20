@@ -1,13 +1,13 @@
-package br.com.italopatricio.mbuyer;
+package br.com.italopatricio.mseller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MbuyerApplication {
+public class MSellerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MbuyerApplication.class, args);
+		SpringApplication.run(MSellerApplication.class, args);
 	}
 
 }

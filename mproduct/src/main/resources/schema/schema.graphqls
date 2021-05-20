@@ -1,9 +1,15 @@
-type Query {
+type Query @extends{
     products(titleFilter: String): [Product]
 }
 
-type Product @key(fields: "id") @key(fields: "buyerId"){
+type Product @key(fields: "id") @key(fields: "sellerId") {
     id: Int!
     title: String!
-    buyerId: Int
+    sellerId: Int!
+}
+
+type Seller @key(fields: "id") @extends {
+    id: Int! @external
+    productsOf: [Product!]
+    productsOfBatchDataLoader: [Product!]
 }

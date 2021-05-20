@@ -1,0 +1,12 @@
+type Query {
+    sellers(nameFilter: String): [Seller]
+}
+
+type Product @extends {
+    seller: Seller
+}
+
+type Seller @key(fields: "id") {
+    id: Int!
+    name: String
+}

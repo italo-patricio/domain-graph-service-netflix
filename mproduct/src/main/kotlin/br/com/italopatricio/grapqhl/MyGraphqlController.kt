@@ -1,43 +1,46 @@
 package br.com.italopatricio.grapqhl
 
-import com.netflix.dgs.codgen.generated.types.Product
 import com.netflix.graphql.dgs.*
+import graphql.schema.DataFetchingEnvironment
+import org.dataloader.BatchLoader
+import org.dataloader.DataLoader
+import org.springframework.beans.factory.annotation.Autowired
+import java.util.concurrent.CompletableFuture
 
 @DgsComponent
 class MyGraphqlController {
-    private val products = listOf(
-            Product(1, "Produto AA", 1),
-            Product(2, "Produto BB", 2),
-            Product(3, "Produto CC", 1),
-            Product(4, "Produto DD", 1),
-            Product(5, "Produto EE", 1)
-    )
+
+    @Autowired
+    lateinit var productService: ProductService
 
     @DgsQuery
     fun products(@InputArgument titleFilter : String?): List<Product> {
-        return if(titleFilter != null) {
-            products.filter { it.title.contains(titleFilter) }
-        } else {
-            products
-        }
+      return productService.products(titleFilter)
     }
 
-    // relation one-to-many
- //   @DgsEntityFetcher(name = "Product")
- //   fun buyerEntityFetch(values: Map<String?, Any?>): Buyer? {
- //       return Buyer(values["id"] as Int)
- //   }
- //
- //   @DgsData(parentType = "Query", field = "buyer")
- //   fun buyerData(dataFetchingEnvironment: DgsDataFetchingEnvironment): List<Product?>? {
- //       val buyer: Buyer = dataFetchingEnvironment.getSource()
- //       return products.stream()
- //           .filter({
- //               it.buyerId === buyer.id
- //           }).collect(Collectors.toList())
- //   }
-    // relation one-to-many
+    @DgsEntityFetcher(name = "Seller")
+    fun seller(values: Map<String, Object>): Seller {
+        println("DgsEntityFetcher id=" + values["id"])
+        return Seller(values["id"] as Int)
+    }
+
+    @DgsData(parentType = "Seller", field = "productsOf")
+    fun productsOf(dfe: DataFetchingEnvironment): List<Product> {
+        val dataLoader = dfe.getSource<Seller>()
+
+        println("DgsData id =" + dataLoader.id)
+
+        return productService.getProductsBySellerId(dataLoader.id)
+    }
+
+    @DgsData(parentType = "Seller", field = "productsOfBatchDataLoader")
+    fun productsOfBatchDataLoaderFetcher(dfe: DataFetchingEnvironment): CompletableFuture<List<Product>> {
+        println("productsOfBatchDataLoaderFetcher")
+        val productsDataLoader: DataLoader<Int, List<Product>> = dfe.getDataLoader("productsOfBatchDataLoader")
+        val seller = dfe.getSource<Seller>()
+        return productsDataLoader.load(seller.id)
+    }
 
 }
 
-data class Product(val id: Int, val title: String, val buyerId: Int)
+
