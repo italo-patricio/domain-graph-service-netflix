@@ -1,0 +1,7 @@
+version: '3'
+services:
+  apollo:
+    image: apollo:dev
+    build: apollo-gateway/
+    ports:
+      - "8081:8081"
