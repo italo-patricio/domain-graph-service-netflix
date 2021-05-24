@@ -11,5 +11,5 @@ type Product @key(fields: "id") @key(fields: "sellerId") {
 type Seller @key(fields: "id") @extends {
     id: Int! @external
     productsOf: [Product!]
-    productsOfBatchDataLoader: [Product!]
+    productsOfBatchDataLoader: [Product]
 }

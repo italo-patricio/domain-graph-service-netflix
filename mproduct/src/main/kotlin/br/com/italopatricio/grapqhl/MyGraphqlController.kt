@@ -34,10 +34,15 @@ class MyGraphqlController {
     }
 
     @DgsData(parentType = "Seller", field = "productsOfBatchDataLoader")
-    fun productsOfBatchDataLoaderFetcher(dfe: DataFetchingEnvironment): CompletableFuture<List<Product>> {
+    fun productsOfBatchDataLoaderFetcher(dfe: DataFetchingEnvironment): CompletableFuture<List<Product>>? {
         println("productsOfBatchDataLoaderFetcher")
         val productsDataLoader: DataLoader<Int, List<Product>> = dfe.getDataLoader("productsOfBatchDataLoader")
         val seller = dfe.getSource<Seller>()
+
+//        val productBatchLoader = BatchLoader<Int, Product> {
+//            keys -> CompletableFuture.supplyAsync {  return@supplyAsync productService.getProductsBySellersId(keys) }
+//        }
+
         return productsDataLoader.load(seller.id)
     }
 

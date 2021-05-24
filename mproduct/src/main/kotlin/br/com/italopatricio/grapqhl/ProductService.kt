@@ -5,9 +5,10 @@ import kotlin.streams.toList
 
 interface ProductService {
     fun products(titleFilter: String?): List<Product>
-    fun productsByIds(ids: List<Int>): List<Product>
+    fun productById(id: Int): Product?
+    fun productsByIds(ids: List<Int>): List<Product>?
     fun getProductsBySellerId(sellerId: Int): List<Product>
-    fun getProductsBySellersId(sellersId: List<Int>): List<Product>
+    fun getProductsBySellersId(sellersId: List<Int>): List<Product>?
 }
 
 @Service
@@ -27,6 +28,11 @@ class ProductServiceImpl : ProductService {
         } else {
             _products
         }
+    }
+
+    override fun productById(id: Int): Product? {
+        println("ProductServiceImpl.productByIds")
+        return _products.find { id == it.id }
     }
 
     override fun productsByIds(ids: List<Int>): List<Product> {
